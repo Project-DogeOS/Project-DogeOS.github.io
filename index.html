@@ -18,15 +18,22 @@
   margin-bottom: 8px;
   margin-top: -2px;
   padding: 10px 10px;
-  border: 1px solid #999;
+  border: 1px solid #ccc;
   border-top: 0px;
   border-radius: 0px 0px 4px 4px;
   z-index: 5;
   background-color: #fff;
+  box-shadow: 0 1px 1px rgba(0,0,0,.05);
 }
 .dogeos-tabpane {
   background-color: #fff;
   padding: 20px 20px;
+}
+.dogeos-tabcontent {
+  border: 1px solid #ddd;
+  border-top: 0px;
+  border-radius: 0px 0px 4px 4px;
+  box-shadow: rgba(0, 0, 0, 0.0470588) 0px 1px 1px 0px;
 }
     </style>
 
@@ -35,6 +42,7 @@
     <![endif]-->
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="javascripts/jquery.floatingFixed.js"></script>
 
     <title>DogeOS - Very Smart - Many Zones</title>
   </head>
@@ -77,16 +85,18 @@
 
 <h1><a class="anchor" href="#howtouse"><span class="octicon octicon-link"></span></a>How To Boot Your Data Center</h1>
 <h3>System Requirement</h3>
-<ul>
-  <li>Generally X86_64 servers with VT-x and EPT will do. Same as the SmartOS. [<a href="http://wiki.smartos.org/display/DOC/Hardware+Requirements" target="_blank">Find it here</a>].</li>
-</ul>
+<div class="panel panel-default">
+  <div class="panel-body">
+    Generally X86_64 servers with hardware virtualization support (Intel VT-x/EPT) will do. Same as the SmartOS. [<a href="http://wiki.smartos.org/display/DOC/Hardware+Requirements" target="_blank">Find it here</a>].
+  </div>
+</div>
 
 <h3>Prepare the DogeOS Live on</h3>
 <ul class="nav nav-tabs">
   <li class="active"><a href="#dvd" data-toggle="tab">DVD ISO</a>
   <li><a href="#usb" data-toggle="tab">USB Drive</a>
 </ul>
-<div class="tab-content">
+<div class="tab-content dogeos-tabcontent">
   <div class="tab-pane fade in active dogeos-tabpane" id="dvd">
     <ol>
       <li>Burn the ISO to a DVD.
@@ -106,7 +116,7 @@
   <li class="active"><a href="#resource-node" data-toggle="tab">Resource Node</a>
   <li><a href="#head-node" data-toggle="tab">Head Node</a>
 </ul>
-<div class="tab-content">
+<div class="tab-content dogeos-tabcontent">
   <div class="tab-pane fade in active dogeos-tabpane" id="resource-node">
     NO ACTIONS NEED! After the live system booted, it works! <br>
     (check chunter with <code>svcs chunter</code>).
@@ -188,6 +198,24 @@
   ga('send', 'pageview');
 </script>
 <!-- google analytic end -->
+
+<!-- AddThis Button BEGIN -->
+<div class="addthis_toolbox addthis_floating_style addthis_32x32_style" style="left:50px;top:50px;">
+  <a class="addthis_button_preferred_1"></a>
+  <a class="addthis_button_preferred_2"></a>
+  <a class="addthis_button_preferred_3"></a>
+  <a class="addthis_button_preferred_4"></a>
+  <a class="addthis_button_compact"></a>
+</div>
+<script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5220492a45b8fcc7"></script>
+<!-- AddThis Button END -->
+
+<script>
+  $(function() {
+    $('aside#sidebar').floatingFixed({ padding: 20 });
+  });
+</script>
 
   </body>
 </html>
