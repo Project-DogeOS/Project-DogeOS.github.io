@@ -173,6 +173,8 @@
 
 </aside>
 
+<div class="mobile-indicator"></div>
+
       </div>
     </div>
 
@@ -215,7 +217,12 @@
 
 <script>
   $(function() {
-    $('aside#sidebar').floatingFixed({ padding: 20 });
+    var isMobileView = $('div.mobile-indicator').css('display') === 'none';
+    if (isMobileView) {
+      // do nothing
+    } else {
+      $('aside#sidebar').floatingFixed({ padding: 20 });
+    }
   });
 </script>
 
