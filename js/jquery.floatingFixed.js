@@ -66,9 +66,10 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       }
       var top = top = t.data("floatingFixedTop");
       if(top < scrollY + opt.padding && !t.data("isFloating")) {
-        t.css({position: 'fixed', top: opt.padding, left: t.data("floatingFixedLeft"), width: t.width() }).data("isFloating", true);
+        t.css({position: 'fixed', top: opt.padding, left: t.data("floatingFixedLeft") }).data("isFloating", true);
       } else if(top >= scrollY + opt.padding && t.data("isFloating")) {
         var pos = t.data("floatingFixedOrig");
+        console.log('orig is:', pos);
         t.css(pos).data("isFloating", false);
       }
     }
