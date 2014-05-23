@@ -121,13 +121,14 @@
 <div class="tab-content dogeos-tabcontent">
   <div class="tab-pane fade in active dogeos-tabpane" id="resource-node">
     NO ACTIONS NEED! After the live system booted, it works! <br>
-    (check chunter with <code>svcs chunter</code>).
+    (check chunter with <code>svcs chunter</code>). <br>
+    The default password for root of DogeOS is the same as SmartOS. Find it in the file <code>/platform/root.password</code> of DogeOS Live.
   </div>
   <div class="tab-pane fade dogeos-tabpane" id="head-node">
     <ol>
       <li>After booted, as root in bash type: <code>/dogeos/bin/headnode-install↵</code>.
-      <li>Follow the instructions, and wait it finish.
-      <li>Then you are done! Go to <code>http://&lt;your-fifo-zone-ip&gt;</code> to manage your cloud!
+      <li>Follow the instructions, and wait it finish. During this you will assign your admin account <code>password</code>.
+      <li>Then you are done! Go to <code>http://&lt;your-fifo-zone-ip&gt;</code> to manage your cloud (with the <code>password</code>)!
     </ol>
   </div>
 </div>
