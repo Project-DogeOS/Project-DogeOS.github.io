@@ -406,6 +406,22 @@ header div.inner > div {
   margin-left: 30px;
 }
 
+.head-github-share {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.head-github-share .share {
+  color: white;
+  margin-top: 90px;
+}
+
+.head-github-share .share a {
+  color: white;
+  margin-right: 6px;
+}
+
 /* #Media Queries
 ================================================== */
 
@@ -474,10 +490,11 @@ header div.inner > div {
     padding: 5px 10px;
     position: relative;
     text-align: center;
-    font-size: 13px;
-    line-height: 1;
-    background-color: #9ddcff;
-    color: #2879d0;
+    font-size: 18px;
+    line-height: 1.2em;
+    background-color: transparent;
+    color: white;
+    border: 1px solid #fff;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
@@ -528,5 +545,21 @@ header div.inner > div {
   }
   #head-caption {
     margin-left: 0px;
+  }
+
+  .head-github-share {
+    position: relative;
+    right: auto;
+    top: auto;
+  }
+
+  .head-github-share .share {
+    color: white;
+    margin-top: 10px;
+  }
+
+  .head-github-share .share a {
+    color: white;
+    margin-right: 6px;
   }
 }
