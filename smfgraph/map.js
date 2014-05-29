@@ -1,36 +1,232 @@
-var manifestMap = {
-  // dogeos
-  'svc:/system/dogeos': '<a target="_blank" href="https://github.com/Project-DogeOS/DogeOS/blob/master/overlay/lib/svc/manifest/system/dogeos-chunter.xml">dogeos-chunter.xml</a>',
-  'svc:/milestone/sysconfig':'<a target="_blank" href="https://github.com/Project-DogeOS/DogeOS/blob/master/overlay/lib/svc/manifest/milestone/sysconfig.xml">sysconfig.xml</a>',
-  // joyent
-  'svc:/system/auditd': '<a target="_blank" href="https://github.com/joyent/smartos-live/tree/master/overlay/generic/lib/svc/manifest/system/auditd.xml">auditd.xml</a>',
-  'svc:/system/console-login': '<a target="_blank" href="https://github.com/joyent/smartos-live/tree/master/overlay/generic/lib/svc/manifest/system/console-login.xml">console-login.xml</a>',
-  'svc:/system/coreadm': '<a target="_blank" href="https://github.com/joyent/smartos-live/tree/master/overlay/generic/lib/svc/manifest/system/coreadm.xml">coreadm.xml</a>',
-  'svc:/system/mdata': '<a target="_blank" href="https://github.com/joyent/smartos-live/tree/master/overlay/generic/lib/svc/manifest/system/mdata.xml">mdata.xml</a>',
-  'svc:/system/smartdc-config': '<a target="_blank" href="https://github.com/joyent/smartos-live/tree/master/overlay/generic/lib/svc/manifest/system/smartdc-config.xml">smartdc-config.xml</a>',
-  'svc:/system/sysidtool': '<a target="_blank" href="https://github.com/joyent/smartos-live/tree/master/overlay/generic/lib/svc/manifest/system/sysidtool.xml">sysidtool.xml</a>',
-  'svc:/system/filesystem/minimal': '<a target="_blank" href="https://github.com/joyent/smartos-live/blob/master/overlay/generic/lib/svc/manifest/system/filesystem/minimal-fs.xml">minimal-fs.xml</a>',
+var manifestMap = $.extend({
   // illumose/Solaris
-};
-function getManifestUrl(name) {
-  return manifestMap[name] || '[TODO]';
+  'svc:/milestone/devices': ['/lib/svc/manifest/milestone/devices'],
+  'svc:/milestone/multi-user': ['/lib/svc/manifest/milestone/multi-user'],
+  'svc:/milestone/multi-user-server': ['/lib/svc/manifest/milestone/multi-user-server'],
+  'svc:/milestone/name-services': ['/lib/svc/manifest/milestone/name-services'],
+  'svc:/milestone/network': ['/lib/svc/manifest/milestone/network'],
+  'svc:/milestone/single-user': ['/lib/svc/manifest/milestone/single-user'],
+  'svc:/milestone/sysconfig': ['/lib/svc/manifest/milestone/sysconfig'],
+  'svc:/network/chunter': ['/lib/svc/manifest/network/chunter'],
+  'svc:/network/datalink-management': ['/lib/svc/manifest/network/datalink-management'],
+  'svc:/network/dns/multicast': ['/lib/svc/manifest/network/dns/multicast'],
+  'svc:/network/epmd': ['/lib/svc/manifest/network/epmd'],
+  'svc:/network/inetd': ['/lib/svc/manifest/network/inetd'],
+  'svc:/network/initial': ['/lib/svc/manifest/network/initial'],
+  'svc:/network/ip-interface-management': ['/lib/svc/manifest/network/ip-interface-management'],
+  'svc:/network/ipfilter': ['/lib/svc/manifest/network/ipfilter'],
+  'svc:/network/ipsec/ipsecalgs': ['/lib/svc/manifest/network/ipsec/ipsecalgs'],
+  'svc:/network/ipsec/policy': ['/lib/svc/manifest/network/ipsec/policy'],
+  'svc:/network/iptun': ['/lib/svc/manifest/network/iptun'],
+  'svc:/network/iscsi/initiator': ['/lib/svc/manifest/network/iscsi/initiator'],
+  'svc:/network/lldp/server': ['/lib/svc/manifest/network/lldp/server'],
+  'svc:/network/loopback': ['/lib/svc/manifest/network/loopback'],
+  'svc:/network/npiv_config': ['/lib/svc/manifest/network/npiv_config'],
+  'svc:/network/ntp': ['/lib/svc/manifest/network/ntp'],
+  'svc:/network/physical': ['/lib/svc/manifest/network/physical'],
+  'svc:/network/routing-setup': ['/lib/svc/manifest/network/routing-setup'],
+  'svc:/network/rpc/bind': ['/lib/svc/manifest/network/rpc/bind'],
+  'svc:/network/sendmail-client': ['/lib/svc/manifest/network/sendmail-client'],
+  'svc:/network/service': ['/lib/svc/manifest/network/service'],
+  'svc:/network/shares/group': ['/lib/svc/manifest/network/shares/group'],
+  'svc:/network/shares/group:zfs': ['/lib/svc/manifest/network/shares/group:zfs'],
+  'svc:/network/smtp:sendmail': ['/lib/svc/manifest/network/smtp:sendmail'],
+  'svc:/network/ssh': ['/lib/svc/manifest/network/ssh'],
+  'svc:/platform/i86pc/acpihpd': ['/lib/svc/manifest/platform/i86pc/acpihpd'],
+  'svc:/system/auditd': ['/lib/svc/manifest/system/auditd'],
+  'svc:/system/auditset': ['/lib/svc/manifest/system/auditset'],
+  'svc:/system/boot-archive': ['/lib/svc/manifest/system/boot-archive'],
+  'svc:/system/boot-archive-update': ['/lib/svc/manifest/system/boot-archive-update'],
+  'svc:/system/boot-config': ['/lib/svc/manifest/system/boot-config'],
+  'svc:/system/console-login': ['/lib/svc/manifest/system/console-login'],
+  'svc:/system/console-login:ttya': ['/lib/svc/manifest/system/console-login:ttya'],
+  'svc:/system/console-login:vt2': ['/lib/svc/manifest/system/console-login:vt2'],
+  'svc:/system/console-login:vt3': ['/lib/svc/manifest/system/console-login:vt3'],
+  'svc:/system/console-login:vt4': ['/lib/svc/manifest/system/console-login:vt4'],
+  'svc:/system/console-login:vt5': ['/lib/svc/manifest/system/console-login:vt5'],
+  'svc:/system/console-login:vt6': ['/lib/svc/manifest/system/console-login:vt6'],
+  'svc:/system/coreadm': ['/lib/svc/manifest/system/coreadm'],
+  'svc:/system/cron': ['/lib/svc/manifest/system/cron'],
+  'svc:/system/cryptosvc': ['/lib/svc/manifest/system/cryptosvc'],
+  'svc:/system/device/local': ['/lib/svc/manifest/system/device/local'],
+  'svc:/system/dogeos': ['/lib/svc/manifest/system/dogeos'],
+  'svc:/system/dumpadm': ['/lib/svc/manifest/system/dumpadm'],
+  'svc:/system/early-manifest-import': ['/lib/svc/manifest/system/early-manifest-import'],
+  'svc:/system/filesystem/local': ['/lib/svc/manifest/system/filesystem/local'],
+  'svc:/system/filesystem/minimal': ['/lib/svc/manifest/system/filesystem/minimal'],
+  'svc:/system/filesystem/root': ['/lib/svc/manifest/system/filesystem/root'],
+  'svc:/system/filesystem/smartdc': ['/lib/svc/manifest/system/filesystem/smartdc'],
+  'svc:/system/filesystem/usr': ['/lib/svc/manifest/system/filesystem/usr'],
+  'svc:/system/fm/smtp-notify': ['/lib/svc/manifest/system/fm/smtp-notify'],
+  'svc:/system/fmd': ['/lib/svc/manifest/system/fmd'],
+  'svc:/system/hostid': ['/lib/svc/manifest/system/hostid'],
+  'svc:/system/identity:domain': ['/lib/svc/manifest/system/identity:domain'],
+  'svc:/system/identity:node': ['/lib/svc/manifest/system/identity:node'],
+  'svc:/system/intrd': ['/lib/svc/manifest/system/intrd'],
+  'svc:/system/keymap': ['/lib/svc/manifest/system/keymap'],
+  'svc:/system/logadm-upgrade': ['/lib/svc/manifest/system/logadm-upgrade'],
+  'svc:/system/manifest-import': ['/lib/svc/manifest/system/manifest-import'],
+  'svc:/system/name-service-cache': ['/lib/svc/manifest/system/name-service-cache'],
+  'svc:/system/pfexec': ['/lib/svc/manifest/system/pfexec'],
+  'svc:/system/picl': ['/lib/svc/manifest/system/picl'],
+  'svc:/system/power': ['/lib/svc/manifest/system/power'],
+  'svc:/system/rbac': ['/lib/svc/manifest/system/rbac'],
+  'svc:/system/resource-mgmt': ['/lib/svc/manifest/system/resource-mgmt'],
+  'svc:/system/rmtmpfiles': ['/lib/svc/manifest/system/rmtmpfiles'],
+  'svc:/system/scheduler': ['/lib/svc/manifest/system/scheduler'],
+  'svc:/system/smartdc/config': ['/lib/svc/manifest/system/smartdc/config'],
+  'svc:/system/smartdc/init': ['/lib/svc/manifest/system/smartdc/init'],
+  'svc:/system/smartdc/metadata': ['/lib/svc/manifest/system/smartdc/metadata'],
+  'svc:/system/smartdc/vmadmd': ['/lib/svc/manifest/system/smartdc/vmadmd'],
+  'svc:/system/svc/restarter': ['/lib/svc/manifest/system/svc/restarter'],
+  'svc:/system/sysevent': ['/lib/svc/manifest/system/sysevent'],
+  'svc:/system/sysidtool:net': ['/lib/svc/manifest/system/sysidtool:net'],
+  'svc:/system/sysidtool:system': ['/lib/svc/manifest/system/sysidtool:system'],
+  'svc:/system/system-log': ['/lib/svc/manifest/system/system-log'],
+  'svc:/system/utmp': ['/lib/svc/manifest/system/utmp'],
+  'svc:/system/vtdaemon': ['/lib/svc/manifest/system/vtdaemon'],
+  'svc:/system/zones': ['/lib/svc/manifest/system/zones'],
+}, {
+  // joyent
+  'svc:/system/auditd': [['/lib/svc/manifest/system/auditd.xml', 'https://github.com/joyent/smartos-live/tree/master/overlay/generic/lib/svc/manifest/system/auditd.xml']],
+  'svc:/system/console-login': [['/lib/svc/manifest/system/console-login.xml', 'https://github.com/joyent/smartos-live/tree/master/overlay/generic/lib/svc/manifest/system/console-login.xml']],
+  'svc:/system/coreadm': [['/lib/svc/manifest/system/coreadm.xml', 'https://github.com/joyent/smartos-live/tree/master/overlay/generic/lib/svc/manifest/system/coreadm.xml']],
+  'svc:/system/mdata': [['/lib/svc/manifest/system/mdata.xml', 'https://github.com/joyent/smartos-live/tree/master/overlay/generic/lib/svc/manifest/system/mdata.xml']],
+  'svc:/system/smartdc/config': [['/lib/svc/manifest/system/smartdc-config.xml', 'https://github.com/joyent/smartos-live/tree/master/overlay/generic/lib/svc/manifest/system/smartdc-config.xml']],
+  'svc:/system/sysidtool': [['/lib/svc/manifest/system/sysidtool.xml', 'https://github.com/joyent/smartos-live/tree/master/overlay/generic/lib/svc/manifest/system/sysidtool.xml']],
+  'svc:/system/filesystem/minimal': [['/lib/svc/manifest/system/filesystem/minimal-fs.xml', 'https://github.com/joyent/smartos-live/blob/master/overlay/generic/lib/svc/manifest/system/filesystem/minimal-fs.xml']],
+}, {
+  // dogeos
+  'svc:/system/dogeos': [['/lib/svc/manifest/system/dogeos-chunter.xml', 'https://github.com/Project-DogeOS/DogeOS/blob/master/overlay/lib/svc/manifest/system/dogeos-chunter.xml']],
+  'svc:/milestone/sysconfig': [['/lib/svc/manifest/milestone/sysconfig.xml', 'https://github.com/Project-DogeOS/DogeOS/blob/master/overlay/lib/svc/manifest/milestone/sysconfig.xml">sysconfig.xml</a>']],
+});
+
+var methodMap = $.extend({
+  // illumose/Solaris
+  'svc:/milestone/devices': ['/lib/svc/method/milestone/devices'],
+  'svc:/milestone/multi-user': ['/lib/svc/method/milestone/multi-user'],
+  'svc:/milestone/multi-user-server': ['/lib/svc/method/milestone/multi-user-server'],
+  'svc:/milestone/name-services': ['/lib/svc/method/milestone/name-services'],
+  'svc:/milestone/network': ['/lib/svc/method/milestone/network'],
+  'svc:/milestone/single-user': ['/lib/svc/method/milestone/single-user'],
+  'svc:/milestone/sysconfig': ['/lib/svc/method/milestone/sysconfig'],
+  'svc:/network/chunter': ['/lib/svc/method/network/chunter'],
+  'svc:/network/datalink-management': ['/lib/svc/method/network/datalink-management'],
+  'svc:/network/dns/multicast': ['/lib/svc/method/network/dns/multicast'],
+  'svc:/network/epmd': ['/lib/svc/method/network/epmd'],
+  'svc:/network/inetd': ['/lib/svc/method/network/inetd'],
+  'svc:/network/initial': ['/lib/svc/method/network/initial'],
+  'svc:/network/ip-interface-management': ['/lib/svc/method/network/ip-interface-management'],
+  'svc:/network/ipfilter': ['/lib/svc/method/network/ipfilter'],
+  'svc:/network/ipsec/ipsecalgs': ['/lib/svc/method/network/ipsec/ipsecalgs'],
+  'svc:/network/ipsec/policy': ['/lib/svc/method/network/ipsec/policy'],
+  'svc:/network/iptun': ['/lib/svc/method/network/iptun'],
+  'svc:/network/iscsi/initiator': ['/lib/svc/method/network/iscsi/initiator'],
+  'svc:/network/lldp/server': ['/lib/svc/method/network/lldp/server'],
+  'svc:/network/loopback': ['/lib/svc/method/network/loopback'],
+  'svc:/network/npiv_config': ['/lib/svc/method/network/npiv_config'],
+  'svc:/network/ntp': ['/lib/svc/method/network/ntp'],
+  'svc:/network/physical': ['/lib/svc/method/network/physical'],
+  'svc:/network/routing-setup': ['/lib/svc/method/network/routing-setup'],
+  'svc:/network/rpc/bind': ['/lib/svc/method/network/rpc/bind'],
+  'svc:/network/sendmail-client': ['/lib/svc/method/network/sendmail-client'],
+  'svc:/network/service': ['/lib/svc/method/network/service'],
+  'svc:/network/shares/group': ['/lib/svc/method/network/shares/group'],
+  'svc:/network/shares/group:zfs': ['/lib/svc/method/network/shares/group:zfs'],
+  'svc:/network/smtp:sendmail': ['/lib/svc/method/network/smtp:sendmail'],
+  'svc:/network/ssh': ['/lib/svc/method/network/ssh'],
+  'svc:/platform/i86pc/acpihpd': ['/lib/svc/method/platform/i86pc/acpihpd'],
+  'svc:/system/auditd': ['/lib/svc/method/system/auditd'],
+  'svc:/system/auditset': ['/lib/svc/method/system/auditset'],
+  'svc:/system/boot-archive': ['/lib/svc/method/system/boot-archive'],
+  'svc:/system/boot-archive-update': ['/lib/svc/method/system/boot-archive-update'],
+  'svc:/system/boot-config': ['/lib/svc/method/system/boot-config'],
+  'svc:/system/console-login': ['/lib/svc/method/system/console-login'],
+  'svc:/system/console-login:ttya': ['/lib/svc/method/system/console-login:ttya'],
+  'svc:/system/console-login:vt2': ['/lib/svc/method/system/console-login:vt2'],
+  'svc:/system/console-login:vt3': ['/lib/svc/method/system/console-login:vt3'],
+  'svc:/system/console-login:vt4': ['/lib/svc/method/system/console-login:vt4'],
+  'svc:/system/console-login:vt5': ['/lib/svc/method/system/console-login:vt5'],
+  'svc:/system/console-login:vt6': ['/lib/svc/method/system/console-login:vt6'],
+  'svc:/system/coreadm': ['/lib/svc/method/system/coreadm'],
+  'svc:/system/cron': ['/lib/svc/method/system/cron'],
+  'svc:/system/cryptosvc': ['/lib/svc/method/system/cryptosvc'],
+  'svc:/system/device/local': ['/lib/svc/method/system/device/local'],
+  'svc:/system/dogeos': ['/lib/svc/method/system/dogeos'],
+  'svc:/system/dumpadm': ['/lib/svc/method/system/dumpadm'],
+  'svc:/system/early-manifest-import': ['/lib/svc/method/system/early-manifest-import'],
+  'svc:/system/filesystem/local': ['/lib/svc/method/system/filesystem/local'],
+  'svc:/system/filesystem/minimal': ['/lib/svc/method/system/filesystem/minimal'],
+  'svc:/system/filesystem/root': ['/lib/svc/method/system/filesystem/root'],
+  'svc:/system/filesystem/smartdc': ['/lib/svc/method/system/filesystem/smartdc'],
+  'svc:/system/filesystem/usr': ['/lib/svc/method/system/filesystem/usr'],
+  'svc:/system/fm/smtp-notify': ['/lib/svc/method/system/fm/smtp-notify'],
+  'svc:/system/fmd': ['/lib/svc/method/system/fmd'],
+  'svc:/system/hostid': ['/lib/svc/method/system/hostid'],
+  'svc:/system/identity:domain': ['/lib/svc/method/system/identity:domain'],
+  'svc:/system/identity:node': ['/lib/svc/method/system/identity:node'],
+  'svc:/system/intrd': ['/lib/svc/method/system/intrd'],
+  'svc:/system/keymap': ['/lib/svc/method/system/keymap'],
+  'svc:/system/logadm-upgrade': ['/lib/svc/method/system/logadm-upgrade'],
+  'svc:/system/manifest-import': ['/lib/svc/method/system/manifest-import'],
+  'svc:/system/name-service-cache': ['/lib/svc/method/system/name-service-cache'],
+  'svc:/system/pfexec': ['/lib/svc/method/system/pfexec'],
+  'svc:/system/picl': ['/lib/svc/method/system/picl'],
+  'svc:/system/power': ['/lib/svc/method/system/power'],
+  'svc:/system/rbac': ['/lib/svc/method/system/rbac'],
+  'svc:/system/resource-mgmt': ['/lib/svc/method/system/resource-mgmt'],
+  'svc:/system/rmtmpfiles': ['/lib/svc/method/system/rmtmpfiles'],
+  'svc:/system/scheduler': ['/lib/svc/method/system/scheduler'],
+  'svc:/system/smartdc/config': ['/lib/svc/method/system/smartdc/config'],
+  'svc:/system/smartdc/init': ['/lib/svc/method/system/smartdc/init'],
+  'svc:/system/smartdc/metadata': ['/lib/svc/method/system/smartdc/metadata'],
+  'svc:/system/smartdc/vmadmd': ['/lib/svc/method/system/smartdc/vmadmd'],
+  'svc:/system/svc/restarter': ['/lib/svc/method/system/svc/restarter'],
+  'svc:/system/sysevent': ['/lib/svc/method/system/sysevent'],
+  'svc:/system/sysidtool:net': ['/lib/svc/method/system/sysidtool:net'],
+  'svc:/system/sysidtool:system': ['/lib/svc/method/system/sysidtool:system'],
+  'svc:/system/system-log': ['/lib/svc/method/system/system-log'],
+  'svc:/system/utmp': ['/lib/svc/method/system/utmp'],
+  'svc:/system/vtdaemon': ['/lib/svc/method/system/vtdaemon'],
+  'svc:/system/zones': ['/lib/svc/method/system/zones'],
+}, {
+  // joyent
+  'svc:/system/auditd': ['/lib/svc/method/svc-auditd'],
+  'svc:/system/console-login': [['/lib/svc/method/console_login', 'https://github.com/joyent/smartos-live/blob/master/overlay/generic/lib/svc/method/console-login']],
+  'svc:/system/coreadm': [''],
+  'svc:/system/mdata': [['/lib/svc/method/mdata-fetch', 'https://github.com/joyent/smartos-live/blob/master/overlay/generic/lib/svc/method/mdata-fetch'],
+                        ['/lib/svc/method/mdata-execute', 'https://github.com/joyent/smartos-live/blob/master/overlay/generic/lib/svc/method/mdata-execute']],
+  'svc:/system/smartdc/config': ['/lib/svc/method/smartdc-config'],
+  'svc:/system/sysidtool': [''],
+  'svc:/system/filesystem/minimal': ['/lib/svc/method/fs-minimal'],
+}, {
+  // dogeos
+  'svc:/system/dogeos': [['/dogeos/bin/chunter-init', 'https://github.com/Project-DogeOS/DogeOS/blob/master/overlay/dogeos/bin/chunter-init']],
+  'svc:/milestone/sysconfig': [''],
+});
+
+function getFromMap(map) {
+  var _map = map;
+  return function(name) {
+    var d = _map[name];
+    if (d) {
+      var r = '';
+      d.forEach(function(elem, index) {
+        if (index > 0) {
+          r += '<br>';
+        }
+        if ($.isArray(elem)) {
+          r += sprintf('<a target="_blank" href="%(url)s">%(file)s</a>', { url: elem[1], file: elem[0]});
+        } else {
+          r += elem;
+        }
+      });
+      return r;
+    } else {
+      return '[TOFIX]';
+    }
+  }
 }
 
-var methodMap = {
-  // dogeos
-  'svc:/system/dogeos': '<a target="_blank" href="https://github.com/Project-DogeOS/DogeOS/blob/master/overlay/dogeos/bin/chunter-init">chunter-init</a>',
-  'svc:/milestone/sysconfig':'',
-  // joyent
-  'svc:/system/auditd': '/lib/svc/method/svc-auditd',
-  'svc:/system/console-login': '<a target="_blank" href="https://github.com/joyent/smartos-live/blob/master/overlay/generic/lib/svc/method/console-login">console_login</a>',
-  'svc:/system/coreadm': '',
-  'svc:/system/mdata': '<a target="_blank" href="https://github.com/joyent/smartos-live/blob/master/overlay/generic/lib/svc/method/mdata-fetch">mdata-fetch</a><br>'+
-                       '<a target="_blank" href="https://github.com/joyent/smartos-live/blob/master/overlay/generic/lib/svc/method/mdata-execute">mdata-execute</a>',
-  'svc:/system/smartdc-config': '',
-  'svc:/system/sysidtool': '',
-  'svc:/system/filesystem/minimal': '',
-  // illumose/Solaris
-};
-function getMethodUrl(name) {
-  return methodMap[name] || '[TODO]';
-}
+var getManifestUrl = getFromMap(manifestMap);
+var getMethodUrl = getFromMap(methodMap);
