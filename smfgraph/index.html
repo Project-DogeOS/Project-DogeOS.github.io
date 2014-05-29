@@ -4,31 +4,311 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="description" content="An interactive getting started guide for Brackets.">
-    <title>DogeOS SMF Graph</title>
+    <title>DogeOS Smf Browser</title>
     <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2.css" />
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2-bootstrap.css" />
+    <link rel="stylesheet" href="jqtree.css" />
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/sprintf/0.0.7/sprintf.min.js"></script>
+    <script src="tree.jquery.js"></script>
+
+<style>
+body, html {
+  overflow: hidden;
+  height: 100%;
+}
+.container-full {
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+}
+.full-height {
+  height: 100%;
+}
+.info-container {
+  background-color: #eee;
+  border-right: 1px solid #aaa;
+  overflow: auto;
+}
+
+// svg start
+.node {
+}
+.link {
+  stroke: #999;
+}
+.inactive {
+  opacity: .3;
+}
+.inactive text {
+  display: none;
+}
+.node-circle {
+  stroke: #fff;
+  stroke-width: 1.5px;
+  cursor: pointer;
+}
+.node-label {
+  stroke-width: .2px !important;
+  stroke: black !important;
+}
+.active {
+  stroke: red;
+  stroke-width: 2px;
+  opacity: .99;
+}
+.active text {
+  display: block;
+}
+</style>
+
   </head>
   <body>
-    <div id="split-container">
-      <a class="btn btn-default nav-button" id="nav-list" href="list.php<?php echo $dataset_qs; ?>">
-        View list
-      </a>
-      <div id="graph-container">
+    <div class="container-full" id="split-container">
+      <div class="col-md-3 full-height info-container" id="info-container">
+<div id="info" class="info">
+
+<h1><a target="_blank" href="http://www.dogeos.net">DogeOS</a> <br>Smf Browser <br></h1>
+
+<div id="smfSelectorContainer">
+  <select id="smfSelector" style="width: 100%;"></select>
+</div>
+
+<hr style="border-color: #999;" />
+
+<div id="detailContainer">
+</div>
+
+</div>
+      </div>
+      <div class="col-md-9 full-height" id="graph-container">
         <div id="graph"></div>
       </div>
-      <div id="docs-container">
-        <a id="docs-close" href="#">&times;</a>
-        <div id="docs" class="docs"></div>
-      </div>
     </div>
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    <script>
-      config = {
-        jsonUrl: 'dep.json'
-      };
-    </script>
-    <script src="script.js"></script>
+
+<script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
+<script src="map.js"></script>
+<script>
+
+function drawGraph(data) {
+  var width = $('#graph').width(),
+      height = $('#graph-container').height();
+  var graph = data;
+
+  var color = d3.scale.category20();
+
+  var force = d3.layout.force()
+    .charge(-300)
+    .linkDistance(200)
+    .size([width, height]);
+
+  var svg = d3.select("#graph").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+  force.nodes(graph.nodes)
+    .links(graph.links)
+    .start();
+
+  var link = svg.append('g').selectAll(".link")
+    .data(graph.links)
+    .enter()
+    .append("line")
+    .attr("class", "link inactive")
+    .attr("source", function(d) { return d.source.name; })
+    .attr("target", function(d) { return d.target.name; } )
+    .style("stroke-width", function(d) {
+      return Math.sqrt(d.value);
+    });
+
+  var nodeg = svg.append('g').selectAll(".node")
+    .data(graph.nodes)
+    .enter()
+    .append("g")
+    .attr("class", "node inactive")
+    .attr("name", function(d) {
+      return d.name;
+    });
+
+  var circle = nodeg.append("circle")
+    .attr("class", "node-circle")
+    .attr("r", 15)
+    .style("fill", function(d) {
+      return color(d.group);
+    })
+    .call(force.drag)
+    .on('click', function(d) {
+      selectNode(d.name);
+    });
+
+  circle.append("title")
+    .text(function(d) {
+      return d.name;
+    });
+
+  nodeg.append('text')
+    .attr('class', 'node-label')
+    .attr('text-anchor', 'middle')
+    .text(function(d) {
+      return d.name;
+    });
+
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+    circle.attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+
+    d3.selectAll('.node-label')
+      .attr('x', function(d) { return d.x; })
+      .attr('y', function(d) { return d.y; });
+  });
+}
+
+function genGraphData(data) {
+  var gd = { nodes: [], links: [], groups: [] };
+  var names = Object.keys(data);
+  names.forEach(function(n) {
+    gd.groups.push(n.split('/')[1]);
+  });
+  gd.groups.sort();
+  names.forEach(function(n) {
+    gd.nodes.push({ name: n, group: gd.groups.indexOf(n.split('/')[1]) });
+  });
+  gd.nodes.forEach(function(node, i) {
+    var deps = data[node.name];
+    deps.forEach(function(dep) {
+      var j = (function(target) {
+        for (var i=0; i<gd.nodes.length; i++) {
+          if (gd.nodes[i].name == dep) {
+            return i;
+          }
+        }
+        return -1;
+      })(dep);
+      if (j < 0) {
+        console.log('got -1:', 'source:', node.name, 'target:', dep);
+        var newIndex = gd.nodes.push({ name: dep, group: 1 }) - 1;
+        console.log('fixed, will add link:', { source: i, target: newIndex, weight: 1 });
+        gd.links.push({ source: i, target: newIndex });
+      } else {
+        gd.links.push({ source: i, target: j });
+      }
+    });
+  });
+  return gd;
+}
+
+function clearHighlight() {
+  d3.selectAll('.node').classed('active', false).classed('inactive', true);
+  d3.selectAll('.link').classed('active', false).classed('inactive', true);
+}
+
+function highlightNode(name) {
+  var g = d3.select('[name=\"' + name + '\"]');
+  if (g.classed('active')) {
+    return;
+  }
+  g.classed('inactive', false).classed('active', true);
+  var lines = d3.selectAll('line[source="' + name + '"]');
+  if (!lines.empty()) {
+    lines.classed('active', true);
+    lines.each(function(line) {
+      highlightNode(line.target.name);
+    });
+  }
+}
+
+function selectNode(name) {
+  $('#smfSelector').select2('val', name, true);
+}
+
+function updateDetail(name) {
+  var info = '<div>' +
+    '<p><b>Name</b>: ' + name + '</p>' +
+    '<p><b>Manifest</b>: ' + getManifestUrl(name) + '</p>' +
+    '<p><b>Method</b>: ' + getMethodUrl(name) + '</p>' +
+    '<p><b>Dependencies</b>: ' +
+    '</div>';
+  var depsTreeData = (function() {
+    var a = [];
+    function _depsTree(name, a) {
+      var depArray = rawData[name];
+      if (depArray && depArray.length > 0) {
+        var d = { label: name, children: [] };
+        depArray.forEach(function(dep) {
+          _depsTree(dep, d.children);
+        });
+        a.push(d);
+      } else {
+        a.push({ label: name });
+      }
+    }
+    _depsTree(name, a);
+    return a;
+  })();
+  var depsTree = '<div id="depTree"></div>';
+  $('#detailContainer').html(info + depsTree);
+  $('#depTree').tree({
+    data: depsTreeData,
+    autoOpen: 2,
+    autoScroll: true
+  }).bind('tree.click', function(evt) {
+    selectNode(evt.node.name);
+  });
+}
+
+var rawData = null;
+
+$(function() {
+  d3.json('dep.json', function(data) {
+    rawData = data;
+    var gd = genGraphData(data);
+    console.log('graph data calculated:', gd);
+    gd.links.forEach(function(link) {
+      if (gd.nodes[link.source] && gd.nodes[link.target]) {
+      } else {
+        console.log('problem found:', link);
+      }
+    });
+    drawGraph(gd);
+
+    var selector = $('#smfSelector');
+    gd.nodes.forEach(function(node) {
+      selector.append('<option value="' + node.name + '"' + (node.name === "svc:/system/dogeos" ? "selected" : "") + '>' + node.name + '</option>');
+    });
+    selector.select2({
+      placeholder: 'Type or search SMF'
+    });
+    selector.on('change', function() {
+      var v = selector.val();
+      clearHighlight();
+      highlightNode(v);
+      updateDetail(v);
+    });
+    highlightNode(selector.val());
+    updateDetail(selector.val());
+  });
+});
+
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-50337254-3', 'dogeos.net');
+  ga('send', 'pageview');
+
+</script>
+
   </body>
 </html>
