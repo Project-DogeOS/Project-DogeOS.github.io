@@ -95,6 +95,10 @@ var manifestMap = $.extend({
   'svc:/system/smartdc/config': [['/lib/svc/manifest/system/smartdc-config.xml', 'https://github.com/joyent/smartos-live/tree/master/overlay/generic/lib/svc/manifest/system/smartdc-config.xml']],
   'svc:/system/sysidtool': [['/lib/svc/manifest/system/sysidtool.xml', 'https://github.com/joyent/smartos-live/tree/master/overlay/generic/lib/svc/manifest/system/sysidtool.xml']],
   'svc:/system/filesystem/minimal': [['/lib/svc/manifest/system/filesystem/minimal-fs.xml', 'https://github.com/joyent/smartos-live/blob/master/overlay/generic/lib/svc/manifest/system/filesystem/minimal-fs.xml']],
+  'svc:/system/smartdc/config': ['/lib/svc/manifest/system/smartdc/config'],
+  'svc:/system/smartdc/init': ['/lib/svc/manifest/system/smartdc/init'],
+  'svc:/system/smartdc/metadata': ['/lib/svc/manifest/system/smartdc/metadata'],
+  'svc:/system/smartdc/vmadmd': ['/lib/svc/manifest/system/smartdc/vmadmd'],
 }, {
   // dogeos
   'svc:/system/dogeos': [['/lib/svc/manifest/system/dogeos-chunter.xml', 'https://github.com/Project-DogeOS/DogeOS/blob/master/overlay/lib/svc/manifest/system/dogeos-chunter.xml']],
@@ -199,6 +203,10 @@ var methodMap = $.extend({
   'svc:/system/smartdc/config': ['/lib/svc/method/smartdc-config'],
   'svc:/system/sysidtool': [''],
   'svc:/system/filesystem/minimal': ['/lib/svc/method/fs-minimal'],
+  'svc:/system/smartdc/config': ['/lib/svc/method/system/smartdc/config'],
+  'svc:/system/smartdc/init': ['/lib/svc/method/system/smartdc/init'],
+  'svc:/system/smartdc/metadata': ['/lib/svc/method/system/smartdc/metadata'],
+  'svc:/system/smartdc/vmadmd': ['/lib/svc/method/system/smartdc/vmadmd'],
 }, {
   // dogeos
   'svc:/system/dogeos': [['/dogeos/bin/chunter-init', 'https://github.com/Project-DogeOS/DogeOS/blob/master/overlay/dogeos/bin/chunter-init']],

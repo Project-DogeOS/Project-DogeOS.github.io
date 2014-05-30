@@ -33,6 +33,15 @@ body, html {
   border-right: 1px solid #aaa;
   overflow: auto;
 }
+.jqtree-element sup {
+  display: none;
+}
+.jqtree-element:hover sup {
+  display: inline-block;
+}
+.force-show-ib {
+  display: inline-block !important;
+}
 
 // svg start
 .node {
@@ -63,6 +72,32 @@ body, html {
 .active text {
   display: block;
 }
+@keyframes kaboom {
+  0% {
+    transform: scale(1.0);
+    transform-origin: 50% 50%;
+  }
+  100% {
+    transform: scale(2);
+    transform-origin: 50% 50%;
+  }
+}
+@-webkit-keyframes kaboom {
+  0% {
+    -webkit-transform: scale(1.0);
+    -webkit-transform-origin: 50% 50%;
+  }
+  100% {
+    -webkit-transform: scale(2);
+    -webkit-transform-origin: 50% 50%;
+  }
+}
+.selected circle {
+  stroke: red;
+  stroke-width: 3px;
+  -webkit-animation: kaboom 1s ease alternate infinite;
+          animation: kaboom 1s ease alternate infinite;
+}
 </style>
 
   </head>
@@ -71,10 +106,12 @@ body, html {
       <div class="col-md-3 full-height info-container" id="info-container">
 <div id="info" class="info">
 
-<h1><a target="_blank" href="http://www.dogeos.net">DogeOS</a> <br>Smf Browser <br></h1>
+<h1><a target="_blank" href="http://www.dogeos.net"><img src="DogeOS-logo.png" style="width: 64px; height: 64px; border-radius: 20%; box-shadow: 0 0 5px #888;"></img></a>
+Smf Browser <br></h1>
 
 <div id="smfSelectorContainer">
-  <select id="smfSelector" style="width: 100%;"></select>
+  <select id="smfSelector" style="width: 80%;"></select>
+  &nbsp;<button id="backbtn">Go Back</button>
 </div>
 
 <hr style="border-color: #999;" />
@@ -184,6 +221,11 @@ function genGraphData(data) {
   gd.nodes.forEach(function(node, i) {
     var deps = data[node.name];
     deps.forEach(function(dep) {
+      if (dep.indexOf('loopback') >= 0) {
+        // fix the loopback situation
+        //console.log('skip loopback:', node.name, dep);
+        return;
+      }
       var j = (function(target) {
         for (var i=0; i<gd.nodes.length; i++) {
           if (gd.nodes[i].name == dep) {
@@ -193,9 +235,9 @@ function genGraphData(data) {
         return -1;
       })(dep);
       if (j < 0) {
-        console.log('got -1:', 'source:', node.name, 'target:', dep);
+        //console.log('got -1:', 'source:', node.name, 'target:', dep);
         var newIndex = gd.nodes.push({ name: dep, group: 1 }) - 1;
-        console.log('fixed, will add link:', { source: i, target: newIndex, weight: 1 });
+        //console.log('fixed, will add link:', { source: i, target: newIndex, weight: 1 });
         gd.links.push({ source: i, target: newIndex });
       } else {
         gd.links.push({ source: i, target: j });
@@ -205,9 +247,18 @@ function genGraphData(data) {
   return gd;
 }
 
-function clearHighlight() {
-  d3.selectAll('.node').classed('active', false).classed('inactive', true);
-  d3.selectAll('.link').classed('active', false).classed('inactive', true);
+function clearHighlight(noSelected, noNode, noLink) {
+  if (!noSelected) { d3.selectAll('.selected').classed('selected', false); }
+  if (!noNode) { d3.selectAll('.node').classed('active', false).classed('inactive', true); }
+  if (!noLink) { d3.selectAll('.link').classed('active', false).classed('inactive', true); }
+}
+
+function markSelection(name) {
+  var g = d3.select('[name=\"' + name + '\"]');
+  if (g.classed('selected')) {
+    return;
+  }
+  g.classed('selected', true);
 }
 
 function highlightNode(name) {
@@ -225,8 +276,55 @@ function highlightNode(name) {
   }
 }
 
+function focusNodes(nodes) {
+  nodes.forEach(function(name) {
+    var g = d3.select('[name=\"' + name + '\"]');
+    if (g.classed('active')) {
+      return;
+    }
+    g.classed('inactive', false).classed('active', true);
+  });
+  for (var i=0; i<nodes.length - 1; i++) {
+    var lines = d3.selectAll('line[source="' + nodes[i+1] + '"][target="' + nodes[i] + '"]');
+    if (!lines.empty()) {
+      lines.classed('active', true);
+    }
+  }
+}
+
 function selectNode(name) {
   $('#smfSelector').select2('val', name, true);
+}
+
+function selectAndHighlight(name) {
+  curSelection = name;
+  markSelection(name);
+  highlightNode(name);
+  updateDetail(name);
+}
+
+function focusSubTree(event) {
+  event.stopPropagation();
+  var t = $(event.target);
+  if (t.data('infocus')) {
+    selectNode(curSelection);
+  } else {
+    var toFocus = [];
+    (function _findAll(li) {
+      if (li.length > 0) {
+        var t = li.find('.jqtree-title');
+        toFocus.push(t.contents().get(0).nodeValue);
+        _findAll(li.parent().closest('li'));
+      }
+    })(t.closest('li'));
+    clearHighlight('noSelected');
+    focusNodes(toFocus);
+    if (lastFocus) {
+      lastFocus.data('infocus', null).text('focus').parent().removeClass('force-show-ib');
+    }
+    t.data('infocus', true).text('defocus').parent().addClass('force-show-ib');
+    lastFocus = t;
+  }
 }
 
 function updateDetail(name) {
@@ -238,16 +336,20 @@ function updateDetail(name) {
     '</div>';
   var depsTreeData = (function() {
     var a = [];
+    var seen = {}; // this is to hanlde svc:/***/loopback
     function _depsTree(name, a) {
       var depArray = rawData[name];
       if (depArray && depArray.length > 0) {
         var d = { label: name, children: [] };
         depArray.forEach(function(dep) {
-          _depsTree(dep, d.children);
+          if (!(dep in seen)) {
+            _depsTree(dep, d.children);
+          }
         });
         a.push(d);
       } else {
         a.push({ label: name });
+        seen[name] = true;
       }
     }
     _depsTree(name, a);
@@ -262,23 +364,30 @@ function updateDetail(name) {
   }).bind('tree.click', function(evt) {
     selectNode(evt.node.name);
   });
+  $('#depTree span.jqtree-title').append('<sup><a href="#" class="focusbtn">focus</a></sup>');
+  $('a.focusbtn').click(focusSubTree);
 }
 
+// globals
 var rawData = null;
+var curSelection = 'svc:/system/dogeos';
+var lastSelection = 'svc:/system/dogeos';
+var lastFocus = null;
 
 $(function() {
   d3.json('dep.json', function(data) {
     rawData = data;
     var gd = genGraphData(data);
-    console.log('graph data calculated:', gd);
-    gd.links.forEach(function(link) {
-      if (gd.nodes[link.source] && gd.nodes[link.target]) {
-      } else {
-        console.log('problem found:', link);
-      }
-    });
+    //console.log('graph data calculated:', gd);
+    //gd.links.forEach(function(link) {
+    //  if (gd.nodes[link.source] && gd.nodes[link.target]) {
+    //  } else {
+    //    console.log('problem found:', link);
+    //  }
+    //});
     drawGraph(gd);
 
+    // setup selector
     var selector = $('#smfSelector');
     gd.nodes.forEach(function(node) {
       selector.append('<option value="' + node.name + '"' + (node.name === "svc:/system/dogeos" ? "selected" : "") + '>' + node.name + '</option>');
@@ -287,13 +396,21 @@ $(function() {
       placeholder: 'Type or search SMF'
     });
     selector.on('change', function() {
+      console.log('will change:');
       var v = selector.val();
       clearHighlight();
-      highlightNode(v);
-      updateDetail(v);
+      selectAndHighlight(v);
+    }).on('select2-selecting', function() {
+      lastSelection = selector.val();
     });
-    highlightNode(selector.val());
-    updateDetail(selector.val());
+
+    // setup backbtn
+    $('#backbtn').click(function() {
+      selectNode(lastSelection);
+    });
+
+    //selectAndHighlight('svc:/system/smartdc/vmadmd');
+    selectAndHighlight(selector.val());
   });
 });
 
@@ -304,10 +421,8 @@ $(function() {
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-50337254-3', 'dogeos.net');
+  ga('create', 'UA-50337254-3', 'dogeos.net/smfgraph');
   ga('send', 'pageview');
-
 </script>
 
   </body>
