@@ -14,6 +14,7 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/sprintf/0.0.7/sprintf.min.js"></script>
     <script src="tree.jquery.js"></script>
+    <script src="jquery-svgpan.js"></script>
 
 <style>
 body, html {
@@ -106,8 +107,31 @@ body, html {
       <div class="col-md-3 full-height info-container" id="info-container">
 <div id="info" class="info">
 
-<h1><a target="_blank" href="http://www.dogeos.net"><img src="DogeOS-logo.png" style="width: 64px; height: 64px; border-radius: 20%; box-shadow: 0 0 5px #888;"></img></a>
-Smf Browser <br></h1>
+<div>
+  <h1><a target="_blank" href="http://www.dogeos.net"><img src="DogeOS-logo.png" style="width: 64px; height: 64px; border-radius: 20%; box-shadow: 0 0 5px #888;"></img></a>
+Smf Browser<sup style="top: -1.5em; font-size: 12px;"><a href="#" class="helpbtn" data-toggle="modal" data-target="#helpModal">[help]</a></sup> <br></h1>
+</div>
+
+<div class="modal fade" id="helpModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">You can ...</h4>
+      </div>
+      <div class="modal-body">
+        <ul>
+          <li> Click any circle in right graph to select it and view its dependencies.
+          <li> Zoom in/out with mouse wheel, and drag to pan the viewport.
+          <li> Select in left select box to view specific smf's dependencies.
+          <li> Click super script <code>focus</code> in dependency tree to highlight that.
+          <li> If the manifest or method is shown as hyperlink, you can click it to view its source on github.
+        </ul>
+        <p>Created &amp; maintained by <a href="https://github.com/liyu1981">liyu1981</a>.</p>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <div id="smfSelectorContainer">
   <select id="smfSelector" style="width: 80%;"></select>
@@ -144,7 +168,9 @@ function drawGraph(data) {
 
   var svg = d3.select("#graph").append("svg")
     .attr("width", width)
-    .attr("height", height);
+    .attr("height", height)
+    .append("g")
+    .attr("id", "viewport");
 
   force.nodes(graph.nodes)
     .links(graph.links)
@@ -411,6 +437,8 @@ $(function() {
 
     //selectAndHighlight('svc:/system/smartdc/vmadmd');
     selectAndHighlight(selector.val());
+
+    $('svg').svgPan('viewport');
   });
 });
 
