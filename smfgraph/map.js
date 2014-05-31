@@ -105,7 +105,7 @@ var manifestMap = $.extend({
 }, {
   // dogeos
   'svc:/system/dogeos': [['/lib/svc/manifest/system/dogeos-chunter.xml', 'https://github.com/Project-DogeOS/DogeOS/blob/master/overlay/lib/svc/manifest/system/dogeos-chunter.xml']],
-  'svc:/milestone/sysconfig': [['/lib/svc/manifest/milestone/sysconfig.xml', 'https://github.com/Project-DogeOS/DogeOS/blob/master/overlay/lib/svc/manifest/milestone/sysconfig.xml">sysconfig.xml</a>']],
+  'svc:/milestone/sysconfig': [['/lib/svc/manifest/milestone/sysconfig.xml', 'https://github.com/Project-DogeOS/DogeOS/blob/master/overlay/lib/svc/manifest/milestone/sysconfig.xml']],
 });
 
 var methodMap = $.extend({

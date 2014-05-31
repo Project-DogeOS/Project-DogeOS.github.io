@@ -143,6 +143,19 @@ Smf Browser<sup style="top: -1.5em; font-size: 12px;"><a href="#" class="helpbtn
 <div id="detailContainer">
 </div>
 
+<div class="modal fade" id="shareModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Share current view by following link</h4>
+      </div>
+      <div class="modal-body">
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 </div>
       </div>
       <div class="col-md-9 full-height" id="graph-container">
@@ -153,6 +166,13 @@ Smf Browser<sup style="top: -1.5em; font-size: 12px;"><a href="#" class="helpbtn
 <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
 <script src="map.js"></script>
 <script>
+
+function getQueryStringByName(name) {
+  name = name.replace(/[\[]/, '\\\[').replace(/[\]]/, '\\\]');
+  var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'),
+      results = regex.exec(window.location.search);
+  return (results == null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' ')));
+}
 
 function drawGraph(data) {
   var width = $('#graph').width(),
@@ -353,9 +373,15 @@ function focusSubTree(event) {
   }
 }
 
+function shareThis() {
+  var s = $('#smfSelector').val();
+  $('#shareModal .modal-body').html('<p>' + 'http://www.dogeos.net/smfgraph/index.html?s=' + encodeURIComponent(s) + '</p>');
+  $('#shareModal').modal('show');
+}
+
 function updateDetail(name) {
   var info = '<div>' +
-    '<p><b>Name</b>: ' + name + '</p>' +
+    '<p><b>Name</b>: ' + name + '<sup><a href="#" class="sharebtn">share</a></sup></p>' +
     '<p><b>Manifest</b>: ' + getManifestUrl(name) + '</p>' +
     '<p><b>Method</b>: ' + getMethodUrl(name) + '</p>' +
     '<p><b>Dependencies</b>: ' +
@@ -392,6 +418,7 @@ function updateDetail(name) {
   });
   $('#depTree span.jqtree-title').append('<sup><a href="#" class="focusbtn">focus</a></sup>');
   $('a.focusbtn').click(focusSubTree);
+  $('a.sharebtn').click(shareThis);
 }
 
 // globals
@@ -422,7 +449,6 @@ $(function() {
       placeholder: 'Type or search SMF'
     });
     selector.on('change', function() {
-      console.log('will change:');
       var v = selector.val();
       clearHighlight();
       selectAndHighlight(v);
@@ -435,8 +461,13 @@ $(function() {
       selectNode(lastSelection);
     });
 
-    //selectAndHighlight('svc:/system/smartdc/vmadmd');
-    selectAndHighlight(selector.val());
+    var selected = getQueryStringByName('s');
+    if (selected && selected.length > 0) {
+      selectNode(decodeURIComponent(selected));
+    } else {
+      //selectAndHighlight('svc:/system/smartdc/vmadmd');
+      selectAndHighlight(selector.val());
+    }
 
     $('svg').svgPan('viewport');
   });
