@@ -83,15 +83,15 @@
 </p>
 <p>DogeOS is a distribution based on
    <a href="http://www.smartos.org">SmartOS</a> and <a href="http://www.fifo-project.org">FIFO project</a>.
-   It is made to be the ultimate cloud OS for data center. Currently it has following features
+   It is made to be the ultimate cloud OS for data center.
 </p>
 <ul>
-  <li>0 time of installation for Resource Node (a.k.a chunter node).</li>
-  <li>< 10min time of installation for Head Node (a.k.a fifo zone node), even without Internet access.</li>
   <li>All industry proven features of SmartOS: ZFS, Dtrace, KVM, Zones and Crossbow.</li>
   <li>Ready-to-use management console from FIFO.</li>
   <li>Nearly 100% resource utilization of hardware.</li>
-</ul>
+  <li>No installation time for Resource Node (a.k.a chunter node).</li>
+  <li>Guided, fast (&lt; 10min) provision of management VM for Head Node (a.k.a fifo zone node), and works even without Internet access.</li>
+ </ul>
 
 <hr>
 
@@ -123,6 +123,21 @@
   </div>
 </div>
 
+<h3>Connect your Servers to form a Cloud</h3>
+<div class="row">
+  <div class="col-sm-6 col-md-12">
+    <div class="thumbnail">
+      <img src="images/DogeOS-netarch.png" alt="DogeOS network architecture">
+      <div class="caption">
+        <ul>
+          <li> Simply connect all your servers to your switch. They are all <code>Resource Node</code>, which will be VM farm.
+          <li> Select anyone of your servers to be <code>Head Node</code>, which will host a special VM(FiFo zone) for management system.
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
 <h3>Boot Your Data Center</h3>
 <ul class="nav nav-tabs">
   <li class="active"><a href="#resource-node" data-toggle="tab">Resource Node</a>
@@ -137,7 +152,7 @@
   <div class="tab-pane fade dogeos-tabpane" id="head-node">
     <ol>
       <li>After booted, as root in bash type: <code>/dogeos/bin/headnode-install↵</code>.
-      <li>Follow the instructions, and wait it finish. During this you will assign your admin account <code>password</code>.
+      <li>Follow the instructions, and wait it finish. During this you will assign your admin account <code>password</code>, and the <code>your-fifo-zone-ip</code> will be shown in the final congratulation message box.
       <li>Then you are done! Go to <code>http://&lt;your-fifo-zone-ip&gt;</code> to manage your cloud (with the <code>password</code>)!
     </ol>
   </div>
