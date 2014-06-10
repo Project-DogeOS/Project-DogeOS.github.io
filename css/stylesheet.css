@@ -422,6 +422,10 @@ header div.inner > div {
   margin-right: 6px;
 }
 
+ul li, ol li {
+  margin-top: 8px;
+}
+
 /* #Media Queries
 ================================================== */
 
