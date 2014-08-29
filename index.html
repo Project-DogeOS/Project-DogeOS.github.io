@@ -131,7 +131,7 @@
       <div class="caption">
         <ul>
           <li> Simply connect all your servers to your switch. They are all <code>Resource Node</code>, which will be VM farm.
-          <li> Select anyone of your servers to be <code>Head Node</code>, which will host a special VM(FiFo zone) for management system.
+          <li> Select anyone of your servers to host a special VM(FiFo zone) for management system.
         </ul>
       </div>
     </div>
@@ -140,8 +140,8 @@
 
 <h3>Boot Your Data Center</h3>
 <ul class="nav nav-tabs">
-  <li class="active"><a href="#resource-node" data-toggle="tab">Resource Node</a>
-  <li><a href="#head-node" data-toggle="tab">Head Node</a>
+  <li class="active"><a href="#resource-node" data-toggle="tab">Server without FiFo Zone</a>
+  <li><a href="#head-node" data-toggle="tab">Server with FiFo Zone</a>
 </ul>
 <div class="tab-content dogeos-tabcontent">
   <div class="tab-pane fade in active dogeos-tabpane" id="resource-node">
@@ -151,7 +151,7 @@
   </div>
   <div class="tab-pane fade dogeos-tabpane" id="head-node">
     <ol>
-      <li>After booted, as root in bash type: <code>/dogeos/bin/headnode-install↵</code>.<br>
+      <li>After booted, as root in bash type: <code>/dogeos/bin/fifozone-install↵</code>.<br>
       <li>Follow the instructions, and wait it finish. During this you will assign your admin account <code>password</code>, and the <code>your-fifo-zone-ip</code> will be shown in the final congratulation message box.<br>
       <li>Then you are done! Go to <code>http://&lt;your-fifo-zone-ip&gt;</code> to manage your cloud (with the <code>password</code>)!
     </ol>
