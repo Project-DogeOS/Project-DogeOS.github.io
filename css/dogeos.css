@@ -12,6 +12,15 @@ dd {
   width: 940px;
 }
 
+@media only screen and (max-width: 767px) {
+  .dogeos-navigation {
+    width: 98%;
+  }
+  .dogeos-navigation li {
+    font-size: 14px !important;
+  }
+}
+
 .dogeos-navigation ul {
   padding-left: 0px;
   border: 1px solid #ccc;
