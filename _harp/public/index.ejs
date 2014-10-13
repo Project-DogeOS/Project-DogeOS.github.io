@@ -133,3 +133,15 @@
 </div>
 
 </aside>
+
+<script>
+  $(function() {
+    // fix mobile view sidebar
+    var isMobileView = $('div.mobile-indicator').css('display') === 'none';
+    if (isMobileView) {
+      // do nothing
+    } else {
+      $('aside#sidebar').floatingFixed({ padding: 20 });
+    }
+  });
+</script>
