@@ -1,0 +1,11 @@
+<section id="main-content" class="dogeos-wide-main-content">
+<% public.news.post._data.index.forEach(function(post) {
+     if (!('draft' in post)) {
+%>
+  <div class="dogeos-news-post">
+    <%- partial("post/" + post.file) %>
+  </div>
+<%   }
+  });
+%>
+</section>

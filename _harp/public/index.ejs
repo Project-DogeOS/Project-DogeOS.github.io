@@ -23,125 +23,18 @@
 
 <hr>
 
-<h1><a class="anchor" href="#howtouse"><span class="octicon octicon-link"></span></a>How To Boot Your Data Center</h1>
-<h3>System Requirement</h3>
-<div class="panel panel-default">
-  <div class="panel-body">
-    Generally X86_64 servers with hardware virtualization support (Intel VT-x/EPT) will do. Same as the SmartOS. [<a href="http://wiki.smartos.org/display/DOC/Hardware+Requirements" target="_blank">Find it here</a>].
-  </div>
-</div>
-
-<h3>Prepare the DogeOS Live on</h3>
-<ul class="nav nav-tabs">
-  <li class="active"><a href="#dvd" data-toggle="tab">DVD ISO</a>
-  <li><a href="#usb" data-toggle="tab">USB Drive</a>
-</ul>
-<div class="tab-content dogeos-tabcontent">
-  <div class="tab-pane fade in active dogeos-tabpane" id="dvd">
-    <ol>
-      <li>Burn the ISO to a DVD.
-      <li>Boot your server (or VirtualBox VM) with the DVD.
-    </ol>
-  </div>
-  <div class="tab-pane fade dogeos-tabpane" id="usb">
-    <ol>
-      <li><code>bunzip2 dogeos-&lt;version&gt;.img.bz2</code>, and write USB img to a USB drive > 2GB.
-      <li>Boot your server with the USB drive.
-    </ol>
-  </div>
-</div>
-
-<h3>Connect your Servers to form a Cloud</h3>
-<div class="row">
-  <div class="col-sm-6 col-md-12">
-    <div class="thumbnail">
-      <img src="images/DogeOS-netarch.png" alt="DogeOS network architecture">
-      <div class="caption">
-        <ul>
-          <li> Simply connect all your servers to your switch. They are all <code>Resource Node</code>, which will be VM farm.
-          <li> Select any of your servers to host a special VM(FiFo zone) for management system.
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-
-<h3>Boot Your Data Center</h3>
-<ul class="nav nav-tabs">
-  <li class="active"><a href="#resource-node" data-toggle="tab">Baremetal</a>
-  <li><a href="#head-node" data-toggle="tab">FiFo Zone</a>
-</ul>
-<div class="tab-content dogeos-tabcontent">
-  <div class="tab-pane fade in active dogeos-tabpane" id="resource-node">
-    <p>NO ACTIONS NEED! After the live system booted, it works! <br>
-    (check chunter with <code>svcs chunter</code>). </p>
-    <p>The default password for root of DogeOS is the same as SmartOS. Find it in the file <code>/platform/root.password</code> of DogeOS Live.</p>
-  </div>
-  <div class="tab-pane fade dogeos-tabpane" id="head-node">
-    <ol>
-      <li>Select any baremetal box, after DogeOS booted, as root login, and in bash type: <code>/dogeos/bin/fifozone-install↵</code>.<br>
-      <li>Follow the instructions, and wait it finish. During this you will assign your admin account <code>password</code>, and the <code>your-fifo-zone-ip</code> will be shown in the final congratulation message box.<br>
-      <li>Then you are done! Go to <code>http://&lt;your-fifo-zone-ip&gt;</code> to manage your cloud (with the <code>password</code>)!
-    </ol>
-  </div>
-</div>
-
-<hr>
-
-<h1><a class="anchor" href="#support"><span class="octicon octicon-link"></span></a>Support, Discuss & Report Bugs</h1>
-<p>It is a GitHub project. So click the top-left <a href="https://github.com/Project-DogeOS/DogeOS"><i class="fa fa-github fa-lg"></i> github link</a>, go there! </p>
-<p>Or if you just want some quick chat or say hello, it may help to join our IRC channel <a href="http://webchat.freenode.net/?channels=#dogeos"><i class="fa fa-comment fa-lg"></i> #dogeos</a>.</p>
-
-<hr>
-
-<h1><a class="anchor" href="#links"><span class="octicon octicon-link"></span></a>Links</h1>
+<h1>Try DogeOS now!</h1>
+<p>
 <ul>
-  <li>SmartOS: <a href="http://www.smartos.org">Homepage</a> | <a href="https://github.com/joyent/smartos-live">Github Repo</a></li>
-  <li>FIFO Project: <a href="https://project-fifo.net">Project Page</a> | <a href="https://github.com/project-fifo">Github Repo</a></li>
+  <li>Click the links in the right sidebar to download the DogeOS release ISO/USB Image.
+  <li>Burn the ISO to DVD or write the USB Image to USB stick.
+  <li>Boot your metal box or virtual box VM to try it.
+  <li>More details could be find in the <a href="/doc/index.html">documentation</a>.
 </ul>
+</p>
 
 </section>
 
 <aside id="sidebar">
-  <p>Current release is <a href="https://github.com/Project-DogeOS/DogeOS/releases/tag/v20140501T225642Z-0.6.0">v20140501T225642Z-0.6.0</a>.</p>
-  <p>Integrated SmartOS version: 20140501T225642Z, FiFo version: v0.6.0.</p>
-
-<div>
-  <a data-real="http://www.ngo4.asia/dogeos/dogeos-20140501T225642Z-0.6.0.iso" href="http://bit.ly/1plfAjU" class="button dogeos-download-link">
-    <small>Download</small>
-    DVD ISO
-  </a>
-  <p class="dogeos-download-mirror">
-    Mirrors:
-    <a data-real="https://release.project-fifo.net/dogeos/dogeos-20140501T225642Z-0.6.0.iso" href="http://bit.ly/1rDKetO" title="Provided by Project-FiFo">EU</a> |
-    <a data-real="http://www.ngo4.asia/dogeos/dogeos-20140501T225642Z-0.6.0.iso" href="http://bit.ly/1plfAjU">HK</a>
-  </p>
-  <p>&uarr; md5: <br> 9f31ab13e432ea52c142870a45eed7f2</p>
-</div>
-
-<div>
-  <a data-real="http://www.ngo4.asia/dogeos/dogeos-20140501T225642Z-0.6.0.img.bz2" href="http://bit.ly/1n1ODGw" class="button dogeos-download-link">
-    <small>Download</small>
-    USB Img Zip
-  </a>
-  <p class="dogeos-download-mirror">
-    Mirrors:
-    <a data-real="https://release.project-fifo.net/dogeos/dogeos-20140501T225642Z-0.6.0.img.bz2" href="http://bit.ly/1sSYaSM" title="Provided by Project-FiFo">EU</a> |
-    <a data-real="http://www.ngo4.asia/dogeos/dogeos-20140501T225642Z-0.6.0.img.bz2" href="http://bit.ly/1n1ODGw">HK</a>
-  </p>
-  <p>&uarr; md5: <br> 53bd1598adad1a6506499db80f772cb0</p>
-</div>
-
+  <%- partial('_release_sidebar') %>
 </aside>
-
-<script>
-  $(function() {
-    // fix mobile view sidebar
-    var isMobileView = $('div.mobile-indicator').css('display') === 'none';
-    if (isMobileView) {
-      // do nothing
-    } else {
-      $('aside#sidebar').floatingFixed({ padding: 20 });
-    }
-  });
-</script>

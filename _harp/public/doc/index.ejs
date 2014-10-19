@@ -1,0 +1,66 @@
+<section id="main-content" class="dogeos-wide-main-content">
+
+<h1><a class="anchor" href="#howtouse"><span class="octicon octicon-link"></span></a>How To Boot Your Data Center</h1>
+<h3>System Requirement</h3>
+<div class="panel panel-default">
+  <div class="panel-body">
+    Generally X86_64 servers with hardware virtualization support (Intel VT-x/EPT) will do. Same as the SmartOS. [<a href="http://wiki.smartos.org/display/DOC/Hardware+Requirements" target="_blank">Find it here</a>].
+  </div>
+</div>
+
+<h3>Prepare the DogeOS Live on</h3>
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#dvd" data-toggle="tab">DVD ISO</a>
+  <li><a href="#usb" data-toggle="tab">USB Drive</a>
+</ul>
+<div class="tab-content dogeos-tabcontent">
+  <div class="tab-pane fade in active dogeos-tabpane" id="dvd">
+    <ol>
+      <li>Burn the ISO to a DVD.
+      <li>Boot your server (or VirtualBox VM) with the DVD.
+    </ol>
+  </div>
+  <div class="tab-pane fade dogeos-tabpane" id="usb">
+    <ol>
+      <li><code>bunzip2 dogeos-&lt;version&gt;.img.bz2</code>, and write USB img to a USB drive > 2GB.
+      <li>Boot your server with the USB drive.
+    </ol>
+  </div>
+</div>
+
+<h3>Connect your Servers to form a Cloud</h3>
+<div class="row">
+  <div class="col-sm-6 col-md-12">
+    <div class="thumbnail">
+      <img src="/images/DogeOS-netarch.png" alt="DogeOS network architecture">
+      <div class="caption">
+        <ul>
+          <li> Simply connect all your servers to your switch. They are all <code>Resource Node</code>, which will be VM farm.
+          <li> Select any of your servers to host a special VM(FiFo zone) for management system.
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>Boot Your Data Center</h3>
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#resource-node" data-toggle="tab">Baremetal</a>
+  <li><a href="#head-node" data-toggle="tab">FiFo Zone</a>
+</ul>
+<div class="tab-content dogeos-tabcontent">
+  <div class="tab-pane fade in active dogeos-tabpane" id="resource-node">
+    <p>NO ACTIONS NEED! After the live system booted, it works! <br>
+    (check chunter with <code>svcs chunter</code>). </p>
+    <p>The default password for root of DogeOS is the same as SmartOS. Find it in the file <code>/platform/root.password</code> of DogeOS Live.</p>
+  </div>
+  <div class="tab-pane fade dogeos-tabpane" id="head-node">
+    <ol>
+      <li>Select any baremetal box, after DogeOS booted, as root login, and in bash type: <code>/dogeos/bin/fifozone-install↵</code>.<br>
+      <li>Follow the instructions, and wait it finish. During this you will assign your admin account <code>password</code>, and the <code>your-fifo-zone-ip</code> will be shown in the final congratulation message box.<br>
+      <li>Then you are done! Go to <code>http://&lt;your-fifo-zone-ip&gt;</code> to manage your cloud (with the <code>password</code>)!
+    </ol>
+  </div>
+</div>
+
+</section>

@@ -1,0 +1,8 @@
+{
+  "name": "dogeos-website",
+  "version": "0.0.0",
+  "description": "",
+  "dependencies": {
+    "prompt": "~0.2.14"
+  }
+}

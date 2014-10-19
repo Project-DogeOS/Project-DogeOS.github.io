@@ -1,0 +1,49 @@
+#!/usr/bin/env node
+
+var path = require('path');
+var fs = require('fs');
+var util = require('util');
+var prompt = require('prompt');
+
+var thisDir = path.dirname(process.mainModule.filename);
+var newsPostDir = path.resolve(thisDir, 'public', 'news', 'post');
+
+function onErr(err) {
+  console.log(err);
+  return 1;
+}
+
+function getTodayString() {
+  var d = new Date();
+  return util.format('%j-%j-%j', d.getFullYear(), d.getMonth() + 1, d.getDate());
+}
+
+var postDataFile = path.resolve(newsPostDir, '_data.json');
+var postData = JSON.parse(fs.readFileSync(postDataFile).toString());
+
+var properties = [
+  {
+    name: 'file',
+    message: 'File name for the new post?'
+  }
+];
+
+prompt.start();
+
+prompt.get(properties, function (err, result) {
+  if (err) { return onErr(err); }
+  var f = util.format('%s-%s', getTodayString(), result.file.trim().replace(/\s/g, '-'));
+  postData.index.push({
+    file: f,
+    draft: true
+  });
+  console.log('create file', f);
+  fs.writeFileSync(path.resolve(newsPostDir, f + '.md'), '');
+  //console.log(newsPostDir, f + '.md');
+  console.log('ok');
+  console.log('update meta data ...');
+  fs.writeFileSync(postDataFile, JSON.stringify(postData, null, '  '));
+  //console.log(JSON.stringify(postData, null, '  '));
+  console.log('ok');
+});
+

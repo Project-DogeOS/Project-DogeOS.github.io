@@ -1,12 +1,23 @@
 <section id="navigation">
 <div class="dogeos-navigation">
   <ul>
-    <li class="<%- current.source == 'index' ? 'active' : '' %>"><a href="index.html">About</a>
-    <li class="<%- current.source == 'news' ? 'active' : '' %>"><a href="news.html">News</a>
-    <li class="<%- current.source == 'doc' ? 'active' : '' %>"><a href="doc.html">Documentation</a>
-    <li class="<%- current.source == 'download' ? 'active' : '' %>"><a href="download.html">Download</a>
-    <li class="<%- current.source == 'contribute' ? 'active' : '' %>"><a href="contribute.html">Contribute</a>
-    <li class="<%- current.source == 'support' ? 'active' : '' %>"><a href="support.html">Support</a>
+    <%
+      // assuming simple 2-level structure, e.g., http://somedomain/category/page.html
+      // or http://somedomain/category.html
+      var category = null, page = null;
+      if (current.path.length === 1) {
+        category = page = current.path[0];
+      } else {
+        category = current.path[0];
+        page = current.path[1];
+      }
+    %>
+    <li class="<%- category == 'index' ? 'active' : '' %>"><a href="/index.html">About</a>
+    <li class="<%- category == 'news' ? 'active' : '' %>"><a href="/news/index.html">News</a>
+    <li class="<%- category == 'doc' ? 'active' : '' %>"><a href="/doc/index.html">Documentation</a>
+    <li class="<%- category == 'download' ? 'active' : '' %>"><a href="/download.html">Download</a>
+    <li class="<%- category == 'contribute' ? 'active' : '' %>"><a href="/contribute.html">Contribute</a>
+    <li class="<%- category == 'support' ? 'active' : '' %>"><a href="/support.html">Support</a>
   </ul>
 </div>
 </section>
