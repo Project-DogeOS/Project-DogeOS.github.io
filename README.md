@@ -1,7 +1,7 @@
 DogeOS Website
 ========================
 
-Access by: <http://www.dogeos.net> or <http://Project-DogeOS.github.io>
+Access by: <http://Project-DogeOS.github.io>
 
 For Dev
 ========================
