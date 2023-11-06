@@ -1,3 +1,5 @@
+STATUS: DISCONTINUED
+
 DogeOS Website
 ========================
 
