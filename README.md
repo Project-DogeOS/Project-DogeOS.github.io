@@ -3,7 +3,7 @@ STATUS: DISCONTINUED
 DogeOS Website
 ========================
 
-Access by: [http://Project-DogeOS.github.io](https://project-dogeos.github.io/)
+Access by: [https://Project-DogeOS.github.io](https://project-dogeos.github.io/)
 
 For Dev
 ========================
